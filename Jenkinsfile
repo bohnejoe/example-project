@@ -13,20 +13,13 @@ podTemplate(
   // echo env.GIT_COMMIT
 
   node('test') {
-    sh 'env'
     stage('Preparation') {
-      git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-      container('maven') {
-        sh 'mvn --version'
-      }
+      checkout scm
     }
 
     stage('Build project with maven') {
       container('maven') {
-        sh """
-        mvn clean install
-        ls -al $WORKSPACE
-        """
+        sh 'mvn clean package'
       }
     }
   }
